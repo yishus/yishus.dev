@@ -1,0 +1,23 @@
+nav ul, footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+nav li {
+  margin-right: 8px;
+}
+
+nav li:after {
+  content: "|";
+  margin-left: 8px;
+}
+
+nav li:last-child:after {
+  content: ""
+}
+
+footer ul {
+  justify-content: space-between;
+}
