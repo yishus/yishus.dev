@@ -1,4 +1,4 @@
-nav ul, footer ul {
+nav ul, .contact ul {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -18,6 +18,6 @@ nav li:last-child:after {
   content: ""
 }
 
-footer ul {
-  justify-content: space-between;
+.contact li {
+  margin-right: 16px;
 }

@@ -23,6 +23,8 @@ if (fs.existsSync(output)) {
 
 utils.copyFolderRecursiveSync(static, output);
 
+fs.mkdirSync(path.join(output, "blog"));
+
 // Convert blog mdx files
 const files = fs.readdirSync(blog);
 files.forEach(function(file) {
@@ -45,8 +47,9 @@ files.forEach(function(file) {
   const element = fn(React, ...Object.values(scope));
   const html = ReactDOMServer.renderToStaticMarkup(element);
 
+  fs.mkdirSync(path.join(output, "blog", path.basename(file, ".mdx")));
   fs.writeFileSync(
-    path.join(output, "blog", path.basename(file, ".mdx") + ".html"),
+    path.join(output, "blog", path.basename(file, ".mdx"), "index.html"),
     html
   );
 });
