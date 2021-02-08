@@ -1,16 +1,24 @@
-body {
+.center {
   padding: 24px;
 }
 
-nav ul,
-.contact {
+@media screen and (min-width: 768px) {
+  .center {
+    max-width: 640px;
+    margin: 0 auto;w
+  }
+}
+
+.list-style-none {
   list-style: none;
-  display: flex;
   padding: 0;
   margin: 0;
 }
 
-nav li,
-.contact li {
+.floaty-list {
+  display: flex;
+}
+
+.floaty-list li {
   margin-right: 8px;
 }
