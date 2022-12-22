@@ -1,12 +1,37 @@
-.center {
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+body {
+  max-width: 608px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  margin: 0 auto;
   padding: 24px;
+  line-height: 1.4;
 }
 
-@media screen and (min-width: 768px) {
-  .center {
-    max-width: 640px;
-    margin: 0 auto;w
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: 1.2em;
   }
+
+  h2 {
+    font-size: 1.1em;
+  }
+}
+
+a {
+  color: #222;
+  text-decoration: underline;
+	text-decoration-color: #aaa;
+  text-underline-offset: 0.2em;
+}
+
+ul {
+  padding-left: 16px;
+}
+
+li {
+  padding: 4px 0;
 }
 
 .list-style-none {
@@ -17,8 +42,19 @@
 
 .floaty-list {
   display: flex;
+  padding-top: 16px;
 }
 
 .floaty-list li {
   margin-right: 8px;
+}
+
+.footnotes {
+  border-top: solid 1px #aaa;
+  padding: 16px 0;
+}
+
+.footnotes small {
+  display: block;
+  padding: 4px 0;
 }
