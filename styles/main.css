@@ -38,6 +38,10 @@ li {
   padding: 4px 0;
 }
 
+img {
+  max-width: 100%;
+}
+
 .list-style-none {
   list-style: none;
   padding: 0;
