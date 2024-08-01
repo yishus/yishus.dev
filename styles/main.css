@@ -1,6 +1,6 @@
 body {
-  max-width: 608px;
-  font-size: 14px;
+  max-width: 720px;
+  font-size: 16px;
   margin: 0 auto;
   padding: 24px;
   line-height: 1.4;
@@ -14,13 +14,6 @@ body {
   h2 {
     font-size: 1.1em;
   }
-}
-
-a {
-  color: #222;
-  text-decoration: underline;
-	text-decoration-color: #aaa;
-  text-underline-offset: 0.2em;
 }
 
 a:hover {
@@ -62,4 +55,8 @@ img {
 .footnotes small {
   display: block;
   padding: 4px 0;
+}
+
+.date {
+  margin-right: 24px;
 }
