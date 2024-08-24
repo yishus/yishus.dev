@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Cardo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap');
 
 body {
-  font-family: 'Cardo', serif;
+  font-family: 'EB Garamond', serif;
   max-width: 720px;
-  font-size: 16px;
+  font-size: 18px;
   margin: 0 auto;
   padding: 24px;
   line-height: 1.4;
