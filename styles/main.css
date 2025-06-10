@@ -1,13 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap');
-
 body {
-  font-family: 'EB Garamond', serif;
+  font-family: system-ui;
   max-width: 720px;
-  font-size: 18px;
+  font-size: 16px;
   margin: 0 auto;
   padding: 24px;
   line-height: 1.4;
   background-color: #f5f5f5;
+  color: rgba(0, 0, 0, 0.8);
 }
 
 @media screen and (max-width: 768px) {
@@ -20,47 +19,18 @@ body {
   }
 }
 
+a {
+  color: rgba(0, 0, 0, 0.8); 
+}
+
+a:visited {
+  color: rgba(0, 0, 0, 0.8); 
+}
+
 a:hover {
-  background-color: #eee;
-}
-
-ul {
-  padding-left: 16px;
-}
-
-li {
-  padding: 4px 0;
+  color: #000;
 }
 
 img {
   max-width: 100%;
-}
-
-.list-style-none {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.floaty-list {
-  display: flex;
-  padding-top: 16px;
-}
-
-.floaty-list li {
-  margin-right: 8px;
-}
-
-.footnotes {
-  border-top: solid 1px #aaa;
-  padding: 16px 0;
-}
-
-.footnotes small {
-  display: block;
-  padding: 4px 0;
-}
-
-time {
-  margin-right: 24px;
 }
