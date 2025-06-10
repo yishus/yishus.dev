@@ -34,3 +34,8 @@ a:hover {
 img {
   max-width: 100%;
 }
+
+article time {
+  font-size: 0.75em;
+  color: rgba(0, 0, 0, 0.6);
+}
