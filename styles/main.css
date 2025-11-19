@@ -52,26 +52,30 @@ article time {
 }
 
 .landing li {
-  display: flex;
-  justify-content: space-between;
   margin-bottom: 16px;
+}
+
+.landing li small {
+  color: rgba(0, 0, 0, 0.6);
+  margin-right: 8px;
 }
 
 footer {
   margin-top: 48px;
   padding-top: 16px;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
+  font-size: 0.875em;
 }
 
-nav ul, footer ul {
+footer ul {
   display: flex;
   gap: 16px;
   padding: 0;
   list-style: none;
 }
 
-nav ul {
-  justify-content: flex-end;
+footer a, footer a:visited, footer a:hover, footer a:visited:hover {
+  color: rgba(0, 0, 0, 0.6);
 }
 
 pre {
@@ -87,6 +91,12 @@ article img {
   box-sizing: border-box;
   border: solid 1px rgba(0, 0, 0, 0.1);
   padding: 16px;
+}
+
+.footnotes {
+  font-size: 0.875em;
+  margin-top: 32px;
+  padding-top: 16px;
 }
 
 article p, .footnotes li {
