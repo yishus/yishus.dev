@@ -97,24 +97,24 @@ steps:
 
         <p>
           It does not even use Roast's control flows! The core tools-in-a-loop
-          workflow is already handled when the sequeuncing of tool calls and
+          workflow is already handled when the sequencing of tool calls and
           reasoning steps are all done by the model. The Roast workflow only
           exists to provide the scaffolding to define the tools and orchestrates
           the execution. Look it's just one raw prompt step!
         </p>
 
         <p>
-          Prior to this I experimented with breaking the steps up into smaller
-          chunks (plan, act, reflect), but by the first plan step the model has
-          already made a decision and started acting by requesting for the tool
-          calls. The next 2 steps turn out to be redundant although admittedly
-          this is a banal example.
+          I experimented with breaking the steps up into smaller chunks (plan,
+          act, reflect), but by the first plan step the model has already made a
+          decision and started acting by requesting for the tool calls, making
+          the next 2 steps redundant. Although admittedly this is a bare
+          example.
         </p>
 
         <p>
-          I then extended the workflow into a generic "agent" flow, and perhaps
-          unsurprisingly the bulk of the work is on iterating the prompt than
-          the workflow structure itself.
+          Extending the workflow into a generic "agent" flow was quick, and
+          perhaps unsurprisingly the bulk of the work is on iterating the prompt
+          than the workflow structure itself.
         </p>
 
         <pre><code>
@@ -153,16 +153,16 @@ Task: <%= task %>
 
 Decide how you will approach the task based on the context you have obtained in this conversation. Use tools if they help with your task. Do not repeat the same step if you have already done so.
 
-RESPONSE FORMAT: You must respond in JSON format within json XML tags. Indicate the output of the step, or task if the entire task has been completed. Indicate if the task is completed with the `task_completed` value, and if you require further input from the user, use the `should_prompt_user` and `user_prompt` values.
+RESPONSE FORMAT: You must respond in JSON format within &lt;json&gt; XML tags. Indicate the output of the step, or task if the entire task has been completed. Indicate if the task is completed with the `task_completed` value, and if you require further input from the user, use the `should_prompt_user` and `user_prompt` values.
 
-json
+&lt;json&gt;
 {
   "output": "Result of the step or task",
   "task_completed": true,
   "should_prompt_user": false,
   "user_prompt": null
 }
-/json
+&lt;/json&gt;
         </code></pre>
 
         <h2>
@@ -170,12 +170,11 @@ json
           <a href="#workflows-as-output" id="workflows-as-output">#</a>
         </h2>
         <p>
-          I'm thinking if this can serve as an advanced plan mode. Instead of
-          writing out the steps in long markdown file, we ask coding agents to
-          generate workflows. If Roast provides a structured artifact for AI
-          workflows, the result would be a reproducible specification for
-          complex tasks, and something we can inspect, version, and run again
-          with consistent behavior.
+          I'm thinking if this can serve as an advanced plan mode. Instead of a
+          long markdown file, we ask coding agents to generate workflows. If
+          Roast provides a structured artifact for AI workflows, the result
+          would be a reproducible specification for complex tasks, and something
+          we can inspect, version, and run again with consistent behavior.
         </p>
         <p>I tried this out with Cursor</p>
         <blockquote>
