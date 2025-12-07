@@ -49,6 +49,7 @@ const copyAssets = () => {
   fs.cpSync(stylesPath, path.join(distPath, "styles"), { recursive: true });
   fs.cpSync(imagesPath, path.join(distPath, "images"), { recursive: true });
   fs.copyFileSync(srcPath + "/index.html", distPath + "/index.html");
+  fs.copyFileSync(srcPath + "/404.html", distPath + "/404.html");
 };
 
 const build = () => {
