@@ -1,0 +1,233 @@
+<title>Taking Roast for a spin</title>
+
+# Taking Roast for a spin
+
+<time datetime="2025-11-18">18 Nov 2025</time>
+
+A while ago, a friend introduced me to [Roast](https://github.com/Shopify/roast)[^1], an open source framework that describes itself as "_[a] convention-oriented framework for creating structured AI workflows._". I tried to understand where it sits within today's aggressively crowded ecosystem of AI frameworks, especially now that many of them have pivoted toward branding themselves as "agent frameworks".
+
+My own understanding of agents was vague. After going through a number of explanations, the clearest and most concrete definition I found was Simon Willison's: "[An LLM agent runs tools in a loop to achieve a goal.](https://simonwillison.net/2025/Sep/18/agents/)" That at least provides a workable mental model.
+
+![Screenshot of google search
+        for 'are ai agents just scripts](../images/what_are_agents.png) <small>Still believe this to be true.</small>
+
+I asked LLMs what are the differences between agents and workflows:
+
+> An agent is an autonomous system that dynamically decides its own next steps to achieve a goal, while a workflow is a predefined, linear sequence of tasks with a fixed path.
+
+Because Roast supports control flow like conditionals and loops, ability to accept user input during the execution, access to output from previous steps, and to make tool calls. We might be able to build an agent-ish workflow that demonstrates some form of autonomy.
+
+## Can we build an agent?
+
+After several iterations, I've landed on this workflow to replicate Pydantic's [weather agent](https://ai.pydantic.dev/examples/weather-agent/) example.
+
+```
+
+name: weather_agent
+model: gpt-4o-mini
+
+tools:
+  - CustomTools::LatLng
+  - CustomTools::Weather
+
+steps:
+  - "What is the weather in London today?"
+
+```
+
+It does not even use Roast's control flows! The core tools-in-a-loop workflow is already handled when the sequencing of tool calls and reasoning steps are all done by the model. The Roast workflow only exists to provide the scaffolding to define the tools and orchestrates the execution. Look it's just one raw prompt step!
+
+I experimented with breaking the steps up into smaller chunks (plan, act, reflect), but by the first plan step the model has already made a decision and started acting by requesting for the tool calls, making the next 2 steps redundant. Although admittedly this is a bare example.
+
+Extending the workflow into a generic "agent" flow was quick, and perhaps unsurprisingly the bulk of the work is on iterating the prompt than the workflow structure itself.
+
+```
+
+name: agent
+model: gpt-4o-mini
+
+tools:
+  - Roast::Tools::ReadFile
+
+steps:
+  - input:
+      name: initial_user_input
+      type: text
+      prompt: "How can I assist you with today?"
+  - agent_loop:
+      repeat:
+        until: "{{output['agent_step']['task_completed'] == true && (output['agent_step']['should_prompt_user'] == false)}}"
+        max_iterations: 5
+        steps:
+          - agent_step
+          - prompted_user_if_required:
+              if: "{{output['agent_step']['should_prompt_user'] == true}}"
+              then:
+                - input:
+                    name: loop_user_input
+                    type: text
+                    prompt: "{{output['agent_step']['user_prompt']}}"
+
+agent_step:
+  json: true
+
+```
+
+```
+
+<% task = @workflow.output['loop_user_input'].present? ? workflow.output["loop_user_input"] : workflow.output["initial_user_input"] %>
+Task: <%= task %>
+
+Decide how you will approach the task based on the context you have obtained in this conversation. Use tools if they help with your task. Do not repeat the same step if you have already done so.
+
+RESPONSE FORMAT: You must respond in JSON format within <json> XML tags. Indicate the output of the step, or task if the entire task has been completed. Indicate if the task is completed with the `task_completed` value, and if you require further input from the user, use the `should_prompt_user` and `user_prompt` values.
+
+<json>
+{
+  "output": "Result of the step or task",
+  "task_completed": true,
+  "should_prompt_user": false,
+  "user_prompt": null
+}
+</json>
+
+```
+
+## Getting coding agents to write workflows
+
+I'm thinking if this can serve as an advanced plan mode. Instead of a long markdown file, we ask coding agents to generate workflows. If Roast provides a structured artifact for AI workflows, the result would be a reproducible specification for complex tasks, and something we can inspect, version, and run again with consistent behavior.
+
+I tried this out with Cursor
+
+> You are creating a Roast workflow (documentation at <https://github.com/Shopify/roast/blob/main/README.md>) that will create a react frontend only app that allows you to play checkers between 2 players. Use bun. Do not build the app, but only create the roast workflow to do it. Divide the work into workflow steps and write prompts for them when needed
+
+```
+
+name: create_checkers_app
+model: gpt-4o-mini
+
+tools:
+  - Roast::Tools::ReadFile
+  - Roast::Tools::WriteFile
+  - Roast::Tools::Grep
+  - Roast::Tools::ListFiles
+
+steps:
+  - plan_app_structure
+  - scaffold_project
+  - configure_project
+  - design_game_state
+  - implement_board_ui
+  - implement_game_logic
+  - wire_up_interactions
+  - add_basic_styling
+  - add_local_two_player_flow
+  - add_basic_tests
+  - summarize_output
+
+# Step: plan the overall React + Bun app structure and file layout
+plan_app_structure:
+  model: gpt-4o
+
+# Step: scaffold a Bun + Vite + React TS project without running it
+scaffold_project: $(cd {{ENV['TARGET_DIR'] || '.'}} && bun create vite@latest checkers-app --template react-ts)
+
+scaffold_project:
+  exit_on_error: true
+
+# Step: configure Bun usage, scripts, and clean up boilerplate
+configure_project:
+  model: gpt-4o
+
+# Step: design TypeScript game state and types for checkers
+design_game_state:
+  model: gpt-4o
+
+# Step: implement the React board and square UI components
+implement_board_ui:
+  model: gpt-4o
+
+# Step: implement pure game logic functions (moves, captures, kinging, win detection)
+implement_game_logic:
+  model: gpt-4o
+
+# Step: wire up interactions between UI and logic (click handling, turn switching, highlighting)
+wire_up_interactions:
+  model: gpt-4o
+
+# Step: add CSS styling for a clean, usable board UI
+add_basic_styling:
+  model: gpt-4o
+
+# Step: ensure clear local two-player flow and restart behavior
+add_local_two_player_flow:
+  model: gpt-4o
+
+# Step: add a few basic tests for the game logic
+add_basic_tests:
+  model: gpt-4o
+
+# Step: summarize final output and how to run the app with Bun
+summarize_output:
+  model: gpt-4o-mini
+
+```
+
+And an example prompt generated
+
+```
+
+You are an AI assistant running inside a Roast workflow. The project `checkers-app/` is a **Bun + Vite + React + TypeScript** app. The board UI, styling, and game logic are in place, and basic interactions are wired up.
+
+In this step, you will ensure that the app provides a clear and smooth **two-player local experience** for humans sharing one device.
+
+Primary file to update (under `checkers-app/`):
+- `src/App.tsx`
+
+You may also touch other files if necessary for small UI additions (e.g., a simple `Controls` component), but keep changes focused and minimal.
+
+Goals:
+1. Clear current player indication:
+   - Display which player's turn it is in the UI (e.g., "Current player: Red" / "Current player: Black").
+   - Style this indicator so it is easy to see (reusing existing CSS where possible).
+2. Turn enforcement:
+   - Ensure that only the current player's pieces can be selected and moved.
+   - Ignore or provide gentle feedback if the non-current player's pieces are clicked.
+3. Game over handling:
+   - Use the game logic's status/winner information to:
+     - Display a message when the game is over (e.g., "Red wins!", "Black wins!", or "Draw.").
+     - Prevent further moves once a winner is determined.
+4. Restart flow:
+   - Add a clear "Restart game" button.
+   - When clicked:
+     - Reset the `GameState` to the initial configuration using the state helper(s).
+     - Clear any selection and status flags needed in the UI.
+5. Optional UX refinements (keep lightweight):
+   - Provide a small text hint explaining basic controls (e.g., "Click one of your pieces, then click a highlighted square to move.").
+   - Keep the layout clean and uncluttered.
+
+Implementation guidelines:
+- Keep all game rules in the game logic modules; this step should only call the existing functions to enforce them.
+- Use React state and effects in `App` as needed, but avoid overcomplicating state management (no need for Redux, etc.).
+- Keep the UI text and labels neutral and easy to change later.
+
+Tools:
+- Use `ReadFile` to inspect `App` and related components.
+- Use `WriteFile` to update relevant files, primarily `src/App.tsx`.
+
+Output:
+- At the end, print a short markdown summary describing:
+  - How the current player and game outcome are shown.
+  - How the restart flow works.
+
+```
+
+It looks pretty good! There were small errors like hallucination of the `ListFiles` tool and the incorrect syntax for the command execution step in `scaffold_project`. But otherwise I ran it and could get a decent looking app, before I got rate limited at the `implement_board_ui` step.
+
+![Screenshot of checkers app created by the workflow with title 'Welcome to the Checkers Game'](../images/welcome_to_the_checkers_game.png)
+
+## Barbecue: Replicating Roast
+
+Lastly, I have been replicating Roast's core ideas in a small library named [Barbecue](https://github.com/yishus/barbecue) , not only to solidify my understanding of the concepts, but also to to experiment with extending its ideas. The library is still a work in progress, but it supports defining workflows in JSON, tool integration, and supports step-wise prompt templates. I've been curious about [code mode](https://blog.cloudflare.com/code-mode/) and I want to add that into Barbecue. Perhaps a blog post on that later.
+
+[^1]: I was previously at Shopify.
