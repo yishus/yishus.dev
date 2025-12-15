@@ -1,5 +1,3 @@
-## 08 Dec 2025
-
 ### Sky Team
 
 I've been playing a lot of [Sky Team](https://boardgamegeek.com/boardgame/373106/sky-team) recently. It's a two-player cooperative dice-placement game about landing a plane. I'm not a big fan of cooperative games, partly due to the quarterbacking problem, but mostly because I've come to dislike the zombie attack waves mechanic that was popularized by Pandemic. You are presented a problem, there is only one solution, and you better do it now. And that repeats for n more time until 120 minutes is up.

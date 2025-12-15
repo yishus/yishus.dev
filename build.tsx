@@ -15,14 +15,29 @@ const stylesPath = path.join(__dirname, "src", "styles");
 const imagesPath = path.join(__dirname, "src", "images");
 
 const buildNotesPage = () => {
-  const files = fs.readdirSync(notesPath);
-  const content = files.map((file) => {
-    return fs.readFileSync(path.join(notesPath, file), "utf-8");
+  const directoryContent = fs.readdirSync(notesPath, {
+    withFileTypes: true,
+    recursive: true,
+  });
+  const directories = directoryContent
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => path.join(dirent.parentPath, dirent.name))
+    .sort()
+    .reverse();
+  const files = directoryContent.filter((dirent) => dirent.isFile());
+  const content = directories.map((directory) => {
+    const filesInDir = files.filter((file) => file.parentPath === directory);
+    const fileContents = filesInDir.map((file) =>
+      fs.readFileSync(path.join(file.parentPath, file.name), "utf-8"),
+    );
+    return (
+      <Notes date={directory} markdownContent={fileContents} key={directory} />
+    );
   });
   const htmlContent = renderToStaticMarkup(
     <Page pageType="notes">
       <title>Notes</title>
-      <Notes markdownContent={content} />
+      {content}
     </Page>,
   );
   fs.writeFileSync(distPath + "/notes.html", `<!DOCTYPE html>\n${htmlContent}`);
