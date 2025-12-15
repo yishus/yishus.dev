@@ -46,16 +46,40 @@ article time {
   color: rgba(0, 0, 0, 0.6);
 }
 
-.landing ul {
+.landing header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.landing nav ul {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  gap: 16px;
+  justify-content: flex-start;
+}
+
+.circle-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.landing li {
+  padding-bottom: 8px;
+}
+
+.writing {
   padding: 0;
   list-style: none;
 }
 
-.landing li {
+.writing li {
   margin-bottom: 16px;
 }
 
-.landing li small {
+.writing li small {
   color: rgba(0, 0, 0, 0.6);
   margin-right: 8px;
 }
@@ -114,4 +138,3 @@ nav ul {
   gap: 16px;
   justify-content: flex-end;
 }
-

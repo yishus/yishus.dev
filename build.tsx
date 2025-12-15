@@ -11,8 +11,7 @@ const distPath = path.join(__dirname, "dist");
 const srcPath = path.join(__dirname, "src");
 const notesPath = path.join(__dirname, "src", "notes");
 const articlesPath = path.join(__dirname, "src", "articles");
-const stylesPath = path.join(__dirname, "src", "styles");
-const imagesPath = path.join(__dirname, "src", "images");
+const assetsPath = path.join(__dirname, "src", "assets");
 
 const buildNotesPage = () => {
   const directoryContent = fs.readdirSync(notesPath, {
@@ -61,10 +60,7 @@ const buildArticlePages = () => {
 };
 
 const copyAssets = () => {
-  fs.cpSync(stylesPath, path.join(distPath, "styles"), { recursive: true });
-  fs.cpSync(imagesPath, path.join(distPath, "images"), { recursive: true });
-  fs.copyFileSync(srcPath + "/index.html", distPath + "/index.html");
-  fs.copyFileSync(srcPath + "/404.html", distPath + "/404.html");
+  fs.cpSync(assetsPath, distPath, { recursive: true });
 };
 
 const build = () => {

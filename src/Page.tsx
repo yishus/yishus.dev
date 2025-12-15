@@ -24,7 +24,7 @@ const Page = ({ children, pageType }: PropsWithChildren<PageProps>) => {
               <a href="/notes">Notes</a>
             </li>
             <li>
-              <a href="/">Writings</a>
+              <a href="/writing">Writing</a>
             </li>
           </ul>
         </nav>
