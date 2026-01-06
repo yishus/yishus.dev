@@ -4,18 +4,26 @@ interface PageProps {
   pageType?: "notes" | "article";
   ogImage?: string;
   title?: string;
+  description?: string;
 }
 
-const Page = ({ children, pageType, ogImage, title }: PropsWithChildren<PageProps>) => {
+const Page = ({
+  children,
+  pageType,
+  ogImage,
+  title,
+  description,
+}: PropsWithChildren<PageProps>) => {
   const stylesPath =
     pageType === "notes" ? "./styles/main.css" : "../styles/main.css";
   const scriptPath = pageType === "notes" ? "./main.js" : "../main.js";
+
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta httpEquiv="x-ua-compatible" content="ie=edge" />
-        <meta name="description" content="" />
+        <meta name="description" content={description} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href={stylesPath} />
         <script src={scriptPath} defer />

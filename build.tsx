@@ -17,17 +17,22 @@ const assetsPath = path.join(__dirname, "src", "assets");
 interface ArticleMetadata {
   title: string;
   date?: string;
+  description?: string;
 }
 
 const extractMetadata = (markdown: string): ArticleMetadata => {
   const titleMatch = markdown.match(/<title>(.*?)<\/title>/);
   const h1Match = markdown.match(/^#\s+(.+)$/m);
   const dateMatch = markdown.match(/<time datetime="([^"]+)">/);
+  const descriptionMatch = markdown.match(
+    /^(?:(?:# [^\n]*\n|<[a-z]+[^>]*>[\s\S]*?<\/[a-z]+>)\s*)*\s*([^#<\n][^\n]*)/m
+  );
 
   const title = titleMatch?.[1] || h1Match?.[1] || "Article";
   const date = dateMatch?.[1];
+  const description = descriptionMatch?.[1];
 
-  return { title, date };
+  return { title, date, description };
 };
 
 const buildNotesPage = () => {
@@ -51,7 +56,7 @@ const buildNotesPage = () => {
     );
   });
   const htmlContent = renderToStaticMarkup(
-    <Page pageType="notes">
+    <Page pageType="notes" title="Notes" description="Scattered jotted notes">
       <title>Notes</title>
       {content}
     </Page>
@@ -65,16 +70,26 @@ const buildArticlePages = async () => {
   for (const file of files) {
     const fileContent = fs.readFileSync(path.join(articlesPath, file), "utf-8");
     const filename = file.replace(".md", "");
-    const { title, date } = extractMetadata(fileContent);
+    const { title, date, description } = extractMetadata(fileContent);
 
     // Generate OG image
-    const ogImageOutputPath = path.join(distPath, "images", "og", `${filename}.png`);
+    const ogImageOutputPath = path.join(
+      distPath,
+      "images",
+      "og",
+      `${filename}.png`
+    );
     await generateOGImage(title, date, filename, ogImageOutputPath);
 
-    const ogImagePath = `../images/og/${filename}.png`;
+    const ogImagePath = `https://yishus.dev/images/og/${filename}.png`;
 
     const htmlContent = renderToStaticMarkup(
-      <Page pageType="article" ogImage={ogImagePath} title={title}>
+      <Page
+        pageType="article"
+        ogImage={ogImagePath}
+        title={title}
+        description={description}
+      >
         <Article markdownContent={fileContent} />
       </Page>
     );
