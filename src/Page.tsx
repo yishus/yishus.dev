@@ -23,7 +23,6 @@ const Page = ({
       <head>
         <meta charSet="utf-8" />
         <meta httpEquiv="x-ua-compatible" content="ie=edge" />
-        <meta name="description" content={description} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href={stylesPath} />
         <script src={scriptPath} defer />
@@ -40,6 +39,12 @@ const Page = ({
           <>
             <meta property="og:title" content={title} />
             <meta name="twitter:title" content={title} />
+          </>
+        )}
+        {description && (
+          <>
+            <meta property="og:description" content={description} />
+            <meta name="twitter:description" content={description} />
           </>
         )}
       </head>
