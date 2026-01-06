@@ -21,8 +21,7 @@ Because Roast supports control flow like conditionals and loops, ability to acce
 
 After several iterations, I've landed on this workflow to replicate Pydantic's [weather agent](https://ai.pydantic.dev/examples/weather-agent/) example.
 
-```
-
+```yaml
 name: weather_agent
 model: gpt-4o-mini
 
@@ -32,7 +31,6 @@ tools:
 
 steps:
   - "What is the weather in London today?"
-
 ```
 
 It does not even use Roast's control flows! The core tools-in-a-loop workflow is already handled when the sequencing of tool calls and reasoning steps are all done by the model. The Roast workflow only exists to provide the scaffolding to define the tools and orchestrates the execution. Look it's just one raw prompt step!
@@ -41,8 +39,7 @@ I experimented with breaking the steps up into smaller chunks (plan, act, reflec
 
 Extending the workflow into a generic "agent" flow was quick, and perhaps unsurprisingly the bulk of the work is on iterating the prompt than the workflow structure itself.
 
-```
-
+```yaml
 name: agent
 model: gpt-4o-mini
 
@@ -70,7 +67,6 @@ steps:
 
 agent_step:
   json: true
-
 ```
 
 ```
@@ -101,7 +97,7 @@ I tried this out with Cursor
 
 > You are creating a Roast workflow (documentation at <https://github.com/Shopify/roast/blob/main/README.md>) that will create a react frontend only app that allows you to play checkers between 2 players. Use bun. Do not build the app, but only create the roast workflow to do it. Divide the work into workflow steps and write prompts for them when needed
 
-```
+```yaml
 
 name: create_checkers_app
 model: gpt-4o-mini

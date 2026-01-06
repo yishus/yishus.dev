@@ -106,12 +106,16 @@ footer a:visited:hover {
 }
 
 pre {
-  background-color: #eee;
-  padding: 8px 16px;
+  margin: 16px 0;
+  font-size: 14px;
   overflow-x: auto;
-  border: solid 1px #000;
-  margin: 16px;
-  font-size: 12px;
+}
+
+code:not([class]) {
+  background-color: #e8e8e8;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.8em;
 }
 
 article img {
@@ -155,7 +159,7 @@ nav ul {
 
 /* Dark mode styles */
 [data-theme="dark"] body {
-  background-color: #1a1a1a;
+  background-color: #1d1f21;
   color: rgba(255, 255, 255, 0.87);
 }
 
@@ -194,9 +198,9 @@ nav ul {
   color: rgba(255, 255, 255, 0.6);
 }
 
-[data-theme="dark"] pre {
+[data-theme="dark"] code:not([class]) {
   background-color: #2d2d2d;
-  border: solid 1px #444;
+  color: rgba(255, 255, 255, 0.87);
 }
 
 [data-theme="dark"] article img {
