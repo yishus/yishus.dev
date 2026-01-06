@@ -7,6 +7,7 @@ interface PageProps {
 const Page = ({ children, pageType }: PropsWithChildren<PageProps>) => {
   const stylesPath =
     pageType === "notes" ? "./styles/main.css" : "../styles/main.css";
+  const scriptPath = pageType === "notes" ? "./main.js" : "../main.js";
   return (
     <html lang="en">
       <head>
@@ -15,6 +16,7 @@ const Page = ({ children, pageType }: PropsWithChildren<PageProps>) => {
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href={stylesPath} />
+        <script src={scriptPath} defer />
       </head>
 
       <body>
@@ -25,6 +27,11 @@ const Page = ({ children, pageType }: PropsWithChildren<PageProps>) => {
             </li>
             <li>
               <a href="/writing">Writing</a>
+            </li>
+            <li>
+              <button id="theme-toggle" aria-label="Toggle dark mode">
+                <span id="theme-icon">☀️</span>
+              </button>
             </li>
           </ul>
         </nav>

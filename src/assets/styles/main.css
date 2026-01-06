@@ -137,4 +137,72 @@ nav ul {
   display: flex;
   gap: 16px;
   justify-content: flex-end;
+  align-items: center;
+}
+
+#theme-toggle {
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 0.875em;
+  color: inherit;
+}
+
+#theme-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Dark mode styles */
+[data-theme="dark"] body {
+  background-color: #1a1a1a;
+  color: rgba(255, 255, 255, 0.87);
+}
+
+[data-theme="dark"] a {
+  color: #58a6ff;
+}
+
+[data-theme="dark"] a:hover {
+  color: #79b8ff;
+}
+
+[data-theme="dark"] a:visited {
+  color: #bc8cff;
+}
+
+[data-theme="dark"] a:visited:hover {
+  color: #d2a8ff;
+}
+
+[data-theme="dark"] article time {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="dark"] .writing li small {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="dark"] footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] footer a,
+[data-theme="dark"] footer a:visited,
+[data-theme="dark"] footer a:hover,
+[data-theme="dark"] footer a:visited:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="dark"] pre {
+  background-color: #2d2d2d;
+  border: solid 1px #444;
+}
+
+[data-theme="dark"] article img {
+  border: solid 1px rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] #theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
