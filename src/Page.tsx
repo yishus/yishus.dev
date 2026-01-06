@@ -2,9 +2,11 @@ import type { PropsWithChildren } from "react";
 
 interface PageProps {
   pageType?: "notes" | "article";
+  ogImage?: string;
+  title?: string;
 }
 
-const Page = ({ children, pageType }: PropsWithChildren<PageProps>) => {
+const Page = ({ children, pageType, ogImage, title }: PropsWithChildren<PageProps>) => {
   const stylesPath =
     pageType === "notes" ? "./styles/main.css" : "../styles/main.css";
   const scriptPath = pageType === "notes" ? "./main.js" : "../main.js";
@@ -17,6 +19,21 @@ const Page = ({ children, pageType }: PropsWithChildren<PageProps>) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href={stylesPath} />
         <script src={scriptPath} defer />
+        {ogImage && (
+          <>
+            <meta property="og:image" content={ogImage} />
+            <meta property="og:image:width" content="1200" />
+            <meta property="og:image:height" content="630" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:image" content={ogImage} />
+          </>
+        )}
+        {title && (
+          <>
+            <meta property="og:title" content={title} />
+            <meta name="twitter:title" content={title} />
+          </>
+        )}
       </head>
 
       <body>
