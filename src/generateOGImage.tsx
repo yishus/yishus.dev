@@ -21,42 +21,61 @@ export const generateOGImage = async (
   filename: string,
   outputPath: string
 ): Promise<void> => {
-  const fontPath = path.join(process.cwd(), "src", "fonts", "inter-regular.ttf");
+  const fontPath = path.join(
+    process.cwd(),
+    "src",
+    "fonts",
+    "inter-regular.ttf"
+  );
   const fontData = fs.readFileSync(fontPath);
 
   // Create seeded random for this filename
   const random = seededRandom(filename);
 
   // Generate random line properties with better visibility
-  const diagonalLines = Array.from({ length: 6 + Math.floor(random() * 3) }, (_, i) => {
-    const useLeft = random() > 0.5;
-    return {
-      width: "2px",
-      height: `${700 + random() * 300}px`,
-      background: `rgba(${random() > 0.5 ? '88, 166, 255' : '188, 140, 255'}, ${0.12 + random() * 0.08})`,
-      top: `${-200 + random() * 300}px`,
-      ...(useLeft ? { left: `${random() * 800}px` } : { right: `${random() * 800}px` }),
-      transform: `rotate(${-35 + random() * 70}deg)`,
-    };
-  });
+  const diagonalLines = Array.from(
+    { length: 6 + Math.floor(random() * 3) },
+    (_, i) => {
+      const useLeft = random() > 0.5;
+      return {
+        width: "2px",
+        height: `${700 + random() * 300}px`,
+        background: `rgba(${
+          random() > 0.5 ? "88, 166, 255" : "188, 140, 255"
+        }, ${0.12 + random() * 0.08})`,
+        top: `${-200 + random() * 300}px`,
+        ...(useLeft
+          ? { left: `${random() * 800}px` }
+          : { right: `${random() * 800}px` }),
+        transform: `rotate(${-35 + random() * 70}deg)`,
+      };
+    }
+  );
 
-  const horizontalLines = Array.from({ length: 3 + Math.floor(random() * 2) }, () => {
-    const useTop = random() > 0.5;
-    const useLeft = random() > 0.5;
-    return {
-      width: `${400 + random() * 500}px`,
-      height: "1px",
-      background: `rgba(${random() > 0.5 ? '88, 166, 255' : '188, 140, 255'}, ${0.08 + random() * 0.07})`,
-      ...(useTop ? { top: `${50 + random() * 300}px` } : { bottom: `${50 + random() * 300}px` }),
-      ...(useLeft ? { left: "0" } : { right: "0" }),
-    };
-  });
+  const horizontalLines = Array.from(
+    { length: 3 + Math.floor(random() * 2) },
+    () => {
+      const useTop = random() > 0.5;
+      const useLeft = random() > 0.5;
+      return {
+        width: `${400 + random() * 500}px`,
+        height: "1px",
+        background: `rgba(${
+          random() > 0.5 ? "88, 166, 255" : "188, 140, 255"
+        }, ${0.08 + random() * 0.07})`,
+        ...(useTop
+          ? { top: `${50 + random() * 300}px` }
+          : { bottom: `${50 + random() * 300}px` }),
+        ...(useLeft ? { left: "0" } : { right: "0" }),
+      };
+    }
+  );
 
   const svg = await satori(
     <div
       style={{
         width: "1200px",
-        height: "630px",
+        height: "628px",
         display: "flex",
         position: "relative",
         background: "linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%)",
@@ -68,7 +87,7 @@ export const generateOGImage = async (
         style={{
           position: "absolute",
           width: "1200px",
-          height: "630px",
+          height: "628px",
           display: "flex",
         }}
       >
@@ -138,7 +157,7 @@ export const generateOGImage = async (
     </div>,
     {
       width: 1200,
-      height: 630,
+      height: 628,
       fonts: [
         {
           name: "Inter",
@@ -153,7 +172,5 @@ export const generateOGImage = async (
   const ogImagesPath = path.dirname(outputPath);
   fs.mkdirSync(ogImagesPath, { recursive: true });
 
-  await sharp(Buffer.from(svg))
-    .png()
-    .toFile(outputPath);
+  await sharp(Buffer.from(svg)).png().toFile(outputPath);
 };
