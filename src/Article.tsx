@@ -2,7 +2,7 @@ import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { coldarkDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface NoteProps {
   markdownContent: string;
@@ -51,9 +51,14 @@ const Article = ({ markdownContent }: NoteProps) => {
 
             return (
               <SyntaxHighlighter
-                style={oneDark}
+                style={coldarkDark}
                 language={language}
                 PreTag="div"
+                useInlineStyles={false}
+                codeTagProps={{
+                  className: language ? `language-${language}` : undefined,
+                  style: {},
+                }}
               >
                 {String(children).replace(/\n$/, "")}
               </SyntaxHighlighter>

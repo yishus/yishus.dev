@@ -15,7 +15,9 @@ const Page = ({
   description,
 }: PropsWithChildren<PageProps>) => {
   const stylesPath =
-    pageType === "notes" ? "./styles/main.css" : "../styles/main.css";
+    pageType === "notes"
+      ? ["./styles/main.css", "./styles/prism-colddark.css"]
+      : ["../styles/main.css", "../styles/prism-colddark.css"];
   const scriptPath = pageType === "notes" ? "./main.js" : "../main.js";
 
   return (
@@ -24,7 +26,9 @@ const Page = ({
         <meta charSet="utf-8" />
         <meta httpEquiv="x-ua-compatible" content="ie=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href={stylesPath} />
+        {stylesPath.map((path) => (
+          <link key={path} rel="stylesheet" href={path} />
+        ))}
         <script src={scriptPath} defer />
         {ogImage && (
           <>

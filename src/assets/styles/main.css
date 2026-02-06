@@ -109,6 +109,8 @@ pre {
   margin: 16px 0;
   font-size: 14px;
   overflow-x: auto;
+  background-color: #e3eaf2;
+  padding: 1em;
 }
 
 code:not([class]) {
@@ -201,4 +203,8 @@ nav ul {
 
 [data-theme="dark"] article img {
   border: solid 1px rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] pre {
+  background-color: #111b27;
 }
