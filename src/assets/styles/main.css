@@ -137,6 +137,39 @@ article p,
   line-height: 1.5;
 }
 
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 0.9em;
+  overflow: hidden;
+}
+
+table thead tr {
+  background-color: rgba(0, 0, 0, 0.05);
+  text-align: left;
+  font-weight: 600;
+}
+
+table th,
+table td {
+  padding: 12px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+table tbody tr {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+table tbody tr:nth-of-type(even) {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+  transition: background-color 0.2s ease;
+}
+
 nav ul {
   list-style: none;
   padding: 0;
@@ -207,4 +240,25 @@ nav ul {
 
 [data-theme="dark"] pre {
   background-color: #111b27;
+}
+
+[data-theme="dark"] table thead tr {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] table th,
+[data-theme="dark"] table td {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] table tbody tr:nth-of-type(even) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+[data-theme="dark"] table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.04);
 }

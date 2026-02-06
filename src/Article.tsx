@@ -15,7 +15,10 @@ const propsToHeaderId = (children: React.ReactNode) => {
   } else {
     headerText = children == null ? undefined : children.toString();
   }
-  return headerText?.toLowerCase().replace(/[!?]/g, "").replace(/ /g, "-");
+  return headerText
+    ?.toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[^a-z0-9-]/g, "");
 };
 
 const Article = ({ markdownContent }: NoteProps) => {
