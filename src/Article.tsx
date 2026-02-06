@@ -8,6 +8,16 @@ interface NoteProps {
   markdownContent: string;
 }
 
+const propsToHeaderId = (children: React.ReactNode) => {
+  let headerText: string | undefined;
+  if (Array.isArray(children)) {
+    headerText = children[0].toString();
+  } else {
+    headerText = children == null ? undefined : children.toString();
+  }
+  return headerText?.toLowerCase().replace(/[!?]/g, "").replace(/ /g, "-");
+};
+
 const Article = ({ markdownContent }: NoteProps) => {
   return (
     <article>
@@ -16,16 +26,7 @@ const Article = ({ markdownContent }: NoteProps) => {
         components={{
           h2(props) {
             const { children, node, ...rest } = props;
-            let headerText: string | undefined;
-            if (Array.isArray(children)) {
-              headerText = children[0].toString();
-            } else {
-              headerText = children == null ? undefined : children.toString();
-            }
-            const headerId = headerText
-              ?.toLowerCase()
-              .replace(/[!?]/g, "")
-              .replace(/ /g, "-");
+            const headerId = propsToHeaderId(children) || "";
             return (
               <h2 id={headerId} {...rest}>
                 {children}
@@ -33,6 +34,18 @@ const Article = ({ markdownContent }: NoteProps) => {
                   ¶
                 </a>
               </h2>
+            );
+          },
+          h3(props) {
+            const { children, node, ...rest } = props;
+            const headerId = propsToHeaderId(children) || "";
+            return (
+              <h3 id={headerId} {...rest}>
+                {children}
+                <a href={`#${headerId}`} aria-label="Permalink to this heading">
+                  ¶
+                </a>
+              </h3>
             );
           },
           code(props) {
