@@ -10,4 +10,4 @@ Of course this is also the year that the LLMs are used extensively. Unsurprising
 
 Anecdotally Gemini worked the best for me, with this helping to unlock a crucial clue in one:
 
-![Gemini figuring a stick figure drawing is depicting Cestello Annunciation by Sandro Botticelli](./images/cestello_annunciation.png)
+![Gemini figuring a stick figure drawing is depicting Cestello Annunciation by Sandro Botticelli](/images/cestello_annunciation.png)
