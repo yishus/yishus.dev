@@ -16,9 +16,9 @@ const Page = ({
 }: PropsWithChildren<PageProps>) => {
   const stylesPath =
     pageType === "notes"
-      ? ["./styles/main.css", "./styles/prism-colddark.css"]
+      ? ["/styles/main.css", "/styles/prism-colddark.css"]
       : ["../styles/main.css", "../styles/prism-colddark.css"];
-  const scriptPath = pageType === "notes" ? "./main.js" : "../main.js";
+  const scriptPath = pageType === "notes" ? "/main.js" : "../main.js";
 
   return (
     <html lang="en">

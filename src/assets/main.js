@@ -35,5 +35,6 @@
         updateIcon(newTheme === 'dark');
       });
     }
+
   });
 })();

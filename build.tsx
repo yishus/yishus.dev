@@ -4,12 +4,10 @@ import path from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 
 import Article from "./src/Article";
-import Notes from "./src/Notes";
 import Page from "./src/Page";
 import { generateOGImage } from "./src/generateOGImage";
 
 const distPath = path.join(__dirname, "dist");
-const srcPath = path.join(__dirname, "src");
 const notesPath = path.join(__dirname, "src", "notes");
 const articlesPath = path.join(__dirname, "src", "articles");
 const assetsPath = path.join(__dirname, "src", "assets");
@@ -25,7 +23,7 @@ const extractMetadata = (markdown: string): ArticleMetadata => {
   const h1Match = markdown.match(/^#\s+(.+)$/m);
   const dateMatch = markdown.match(/<time datetime="([^"]+)">/);
   const descriptionMatch = markdown.match(
-    /^(?:(?:# [^\n]*\n|<[a-z]+[^>]*>[\s\S]*?<\/[a-z]+>)\s*)*\s*([^#<\n][^\n]*)/m
+    /^(?:(?:# [^\n]*\n|<[a-z]+[^>]*>[\s\S]*?<\/[a-z]+>)\s*)*\s*([^#<\n][^\n]*)/m,
   );
 
   const title = titleMatch?.[1] || h1Match?.[1] || "Article";
@@ -35,33 +33,97 @@ const extractMetadata = (markdown: string): ArticleMetadata => {
   return { title, date, description };
 };
 
+const NOTES_PER_PAGE = 10;
+
+const extractNoteTitle = (markdown: string): string => {
+  const match = markdown.match(/^##\s+(.+)$/m);
+  return match?.[1] || "Untitled";
+};
+
+const titleToHeadingId = (title: string): string => {
+  return title
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[^a-z0-9-]/g, "");
+};
+
 const buildNotesPage = () => {
-  const directoryContent = fs.readdirSync(notesPath, {
-    withFileTypes: true,
-    recursive: true,
-  });
-  const directories = directoryContent
-    .filter((dirent) => dirent.isDirectory())
-    .map((dirent) => path.join(dirent.parentPath, dirent.name))
+  const files = fs
+    .readdirSync(notesPath)
+    .filter((file) => file.endsWith(".md"))
     .sort()
     .reverse();
-  const files = directoryContent.filter((dirent) => dirent.isFile());
-  const content = directories.map((directory) => {
-    const filesInDir = files.filter((file) => file.parentPath === directory);
-    const fileContents = filesInDir.map((file) =>
-      fs.readFileSync(path.join(file.parentPath, file.name), "utf-8")
-    );
-    return (
-      <Notes date={directory} markdownContent={fileContents} key={directory} />
-    );
+
+  const notes = files.map((file) => {
+    const fileContent = fs.readFileSync(path.join(notesPath, file), "utf-8");
+    const title = extractNoteTitle(fileContent);
+    const headingId = titleToHeadingId(title);
+    return { file, fileContent, title, headingId };
   });
-  const htmlContent = renderToStaticMarkup(
-    <Page pageType="notes" title="Notes" description="Scattered jotted notes">
-      <title>Notes</title>
-      {content}
-    </Page>
-  );
-  fs.writeFileSync(distPath + "/notes.html", `<!DOCTYPE html>\n${htmlContent}`);
+
+  const totalPages = Math.max(1, Math.ceil(notes.length / NOTES_PER_PAGE));
+
+  for (let page = 1; page <= totalPages; page++) {
+    const start = (page - 1) * NOTES_PER_PAGE;
+    const pageNotes = notes.slice(start, start + NOTES_PER_PAGE);
+
+    const sidebar = (
+      <aside className="notes-sidebar">
+        <ul>
+          {pageNotes.map((note) => (
+            <li key={note.file}>
+              <a href={`#${note.headingId}`}>{note.title}</a>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    );
+
+    const pagination = totalPages > 1 && (
+      <nav className="pagination">
+        {page > 1 ? (
+          <a href={page === 2 ? "/notes/" : `/notes/${page - 1}/`}>
+            &larr; Newer
+          </a>
+        ) : (
+          <span />
+        )}
+        <span>
+          Page {page} of {totalPages}
+        </span>
+        {page < totalPages ? (
+          <a href={`/notes/${page + 1}/`}>Older &rarr;</a>
+        ) : (
+          <span />
+        )}
+      </nav>
+    );
+
+    const content = pageNotes.map((note) => (
+      <Article key={note.file} markdownContent={note.fileContent} />
+    ));
+
+    const htmlContent = renderToStaticMarkup(
+      <Page pageType="notes" title="Notes" description="Scattered jotted notes">
+        <title>Notes</title>
+        <div className="notes-layout">
+          {sidebar}
+          <div className="notes-content">
+            {content}
+            {pagination}
+          </div>
+        </div>
+      </Page>,
+    );
+
+    const pageDir =
+      page === 1 ? `${distPath}/notes` : `${distPath}/notes/${page}`;
+    fs.mkdirSync(pageDir, { recursive: true });
+    fs.writeFileSync(
+      `${pageDir}/index.html`,
+      `<!DOCTYPE html>\n${htmlContent}`,
+    );
+  }
 };
 
 const buildArticlePages = async () => {
@@ -77,7 +139,7 @@ const buildArticlePages = async () => {
       distPath,
       "images",
       "og",
-      `${filename}.png`
+      `${filename}.png`,
     );
     await generateOGImage(title, date, filename, ogImageOutputPath);
 
@@ -91,7 +153,7 @@ const buildArticlePages = async () => {
         description={description}
       >
         <Article markdownContent={fileContent} />
-      </Page>
+      </Page>,
     );
 
     fs.mkdirSync(distPath + `/${filename}`, {
