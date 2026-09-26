@@ -63,6 +63,9 @@ const Page = ({
               <a href="/writing">Writing</a>
             </li>
             <li>
+              <a href="/good">Good stuff</a>
+            </li>
+            <li>
               <button id="theme-toggle" aria-label="Toggle dark mode">
                 <span id="theme-icon">☀️</span>
               </button>
